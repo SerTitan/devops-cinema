@@ -1,0 +1,20 @@
+spring:
+  application.name: backend
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:cinemadb}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+  liquibase.change-log: classpath:db.changelog/changelog-master.yaml
+
+server:
+  port: 8080
+
+management:
+  server.port: 8081
+  endpoint:
+    health.access: read_only
+    info.access: read_only
+    metrics.access: unrestricted
+    prometheus.access: unrestricted
+    loggers.access: read_only
+  endpoints.web.exposure.include: health,info,prometheus,metrics,loggers

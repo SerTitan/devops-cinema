@@ -1,2 +1,30 @@
 version: "3"
 services:
+  cinema-db:
+    image: postgres:15.1-alpine
+    ports:
+      - "5432:5432"
+    container_name: postgres-1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cinemadb
+    command: [ "postgres", "-c", "wal_level=logical" ]
+    volumes:
+      - cinemadb_data:/var/lib/postgresql/data
+
+  cinema-backend:
+    image: cinema-backend
+    container_name: cinema-backend
+    build:
+      context: backend/
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      DATABASE_HOST: host.docker.internal
+    depends_on:
+      - cinema-db
+
+volumes:
+  cinemadb_data:
