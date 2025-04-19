@@ -52,7 +52,7 @@ public class MovieController {
             })
     })
     public ResponseEntity<?> addReview(@PathVariable Long id, @RequestBody @Valid ReviewRequest request) {
-        return ResponseEntity.ok(movieService.createMovie(id, request));
+        return ResponseEntity.ok(movieService.createReview(id, request));
     }
 
     @PutMapping("/{id}/review/{reviewId}")

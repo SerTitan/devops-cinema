@@ -63,7 +63,7 @@ public class MovieService {
     }
 
     @Transactional
-    public ReviewResponse createMovie(Long movieId, ReviewRequest request) {
+    public ReviewResponse createReview(Long movieId, ReviewRequest request) {
         var movie = findMovie(movieId);
         findReviewByUsernameAndMovieId(request.getUsername(), movieId);
 
