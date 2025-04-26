@@ -65,7 +65,7 @@ jobs:
       - name: Push the docker image to docker hub
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: /backend/Dockerfile
+          context: ./backend
+          file: /Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
