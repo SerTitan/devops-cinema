@@ -43,7 +43,7 @@ jobs:
           mvn clean verify
 
   backend-deploy:
-    needs: build-backend
+    needs: [test-backend, build-backend]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
