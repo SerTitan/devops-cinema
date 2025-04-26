@@ -14,7 +14,7 @@ services:
       - cinemadb_data:/var/lib/postgresql/data
 
   cinema-backend:
-    image: cinema-backend
+    image: arcturs/market_backend
     container_name: cinema-backend
     build:
       context: backend/
