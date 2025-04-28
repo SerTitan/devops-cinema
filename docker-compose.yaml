@@ -13,7 +13,7 @@ services:
       - cinemadb_data:/var/lib/postgresql/data
 
   cinema-backend:
-    image: arcturs/market_backend
+    image: arcturs/cinema_backend
     container_name: cinema-backend
     build:
       context: backend/
@@ -30,11 +30,12 @@ services:
       - cinema-db
   
   cinema-frontend:
+    image: arcturs/cinema_frontend
+    container_name: cinema-frontend
     build:
-      context: ./frontend
+      context: frontend/
       args:
         VITE_API_BASE: http://localhost:8080
-    container_name: cinema-frontend
     ports:
       - "3000:80"
     depends_on:
