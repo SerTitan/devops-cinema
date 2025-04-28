@@ -7,27 +7,26 @@ import { ratingColor } from '../utils/ratingColor'
 
 export default function MovieDetail() {
   const { id } = useParams()
-  const [movie, setMovie]     = useState(null)
-  const [error, setError]     = useState(null)
-  const [adding, setAdding]   = useState(false)
+  const [movie, setMovie] = useState(null)
+  const [error, setError] = useState(null)
+  const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState(null)
 
-  const refresh = () =>
+  useEffect(() => {
     getMovie(id).then(setMovie).catch(setError)
-
-  useEffect(refresh, [id])
+  }, [id])
 
   const handleAdd = body =>
-    addReview(id, body).then(refresh).finally(() => setAdding(false))
+    addReview(id, body).then(() => getMovie(id).then(setMovie).catch(setError)).finally(() => setAdding(false))
 
   const handleUpdate = (rid, body) =>
-    updateReview(id, rid, body).then(refresh).finally(() => setEditing(null))
+    updateReview(id, rid, body).then(() => getMovie(id).then(setMovie).catch(setError)).finally(() => setEditing(null))
 
   const handleDelete = r =>
     window.confirm('Удалить отзыв?') &&
-    deleteReview(id, r.id).then(refresh)
+    deleteReview(id, r.id).then(() => getMovie(id).then(setMovie).catch(setError))
 
-  if (error)  return <p className="text-red-500">{error.message}</p>
+  if (error) return <p className="text-red-500">{error.message}</p>
   if (!movie) return <p className="text-gray-400">Download...</p>
 
   return (
@@ -39,16 +38,13 @@ export default function MovieDetail() {
           alt={movie.title}
           className="md:w-1/3 h-96 object-contain bg-gray-900"
         />
-
         <div className="md:w-2/3 p-6">
           <div className="flex justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">{movie.title}</h1>
               <p className="text-gray-400">{movie.year} • {movie.genre}</p>
             </div>
-            <span className={`${ratingColor(movie.rating)}
-                              flex items-center justify-center
-                              w-14 h-14 rounded-full text-xl font-bold text-white`}>
+            <span className={`${ratingColor(movie.rating)} flex items-center justify-center w-14 h-14 rounded-full text-xl font-bold text-white`}>
               {movie.rating}
             </span>
           </div>

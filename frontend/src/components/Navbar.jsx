@@ -1,10 +1,6 @@
 import React from 'react'
 
-export default function Navbar({
-  search = '',
-  onSearch = () => {},
-  showSearch = true
-}) {
+export default function Navbar({ search = '', onSearch = () => {}, showSearch = true }) {
   return (
     <nav className="bg-gray-800 shadow-lg">
       <div className="container mx-auto px-4">
@@ -37,6 +33,7 @@ export default function Navbar({
           {showSearch && (
             <div className="w-1/2">
               <input
+                data-testid="search-input"
                 type="text"
                 value={search}
                 onChange={e => onSearch(e.target.value)}

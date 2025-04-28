@@ -4,7 +4,7 @@ import { getMovies } from '../api'
 
 export default function MovieList({ search }) {
   const [movies, setMovies] = useState([])
-  const [error, setError]   = useState(null)
+  const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function MovieList({ search }) {
   )
 
   if (loading) return <p className="text-gray-400">Download…</p>
-  if (error)   return <p className="text-red-500">{error.message}</p>
+  if (error) return <p className="text-red-500">{error.message}</p>
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
