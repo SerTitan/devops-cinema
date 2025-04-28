@@ -35,7 +35,8 @@ public class MovieService {
                         .setId(it.getId())
                         .setTitle(it.getTitle())
                         .setYear(it.getYear())
-                        .setRating(it.getRating()))
+                        .setRating(it.getRating())
+						.setPosterUrl(it.getPosterUrl()))
                 .toList();
     }
 
@@ -117,9 +118,10 @@ public class MovieService {
 
     @Transactional
     public void deleteReview(Long movieId, Long reviewId) {
-        findMovie(movieId);
+        var movie = findMovie(movieId);
         findReview(reviewId);
         reviewRepository.deleteById(reviewId);
+		updateMovieRating(movie);
     }
 
     private Movie findMovie(Long id) {
