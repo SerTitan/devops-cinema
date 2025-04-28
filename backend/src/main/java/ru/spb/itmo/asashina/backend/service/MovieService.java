@@ -143,8 +143,12 @@ public class MovieService {
 
     private void updateMovieRating(Movie movie) {
         var reviews = reviewRepository.findAllByMovieId(movie.getId());
-        movieRepository.save(movie.setRating(
+		if (reviews.size() > 0) {
+			movieRepository.save(movie.setRating(
                 (float) (reviews.stream().mapToInt(Review::getRating).sum() / reviews.size())));
+		}
+		else
+			movieRepository.save(movie.setRating((float) 0.0));
     }
 
 }

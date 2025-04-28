@@ -46,6 +46,7 @@ jobs:
   backend-deploy:
     needs: [build-backend, test-backend]
     runs-on: ubuntu-22.04
+    if: success()
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -108,8 +109,9 @@ jobs:
           npm run test
 
   frontend-deploy:
-    needs: build-frontend
+    needs: [build-frontend, test-frontend]
     runs-on: ubuntu-22.04
+    if: success()
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
