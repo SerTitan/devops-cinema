@@ -1,4 +1,3 @@
-version: "3"
 services:
   cinema-db:
     image: postgres:15.1-alpine
@@ -9,12 +8,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: cinemadb
-    command: [ "postgres", "-c", "wal_level=logical" ]
+    command: ["postgres", "-c", "wal_level=logical"]
     volumes:
       - cinemadb_data:/var/lib/postgresql/data
 
   cinema-backend:
-    image: arcturs/market_backend
+    image: arcturs/cinema_backend
     container_name: cinema-backend
     build:
       context: backend/
@@ -22,9 +21,25 @@ services:
       - "8080:8080"
       - "8081:8081"
     environment:
-      DATABASE_HOST: host.docker.internal
+      DATABASE_HOST: cinema-db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: cinemadb
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
     depends_on:
       - cinema-db
+  
+  cinema-frontend:
+    image: arcturs/cinema_frontend
+    container_name: cinema-frontend
+    build:
+      context: frontend/
+      args:
+        VITE_API_BASE: http://localhost:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - cinema-backend
 
 volumes:
   cinemadb_data:

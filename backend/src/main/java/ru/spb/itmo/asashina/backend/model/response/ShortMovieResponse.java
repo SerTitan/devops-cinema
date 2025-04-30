@@ -15,5 +15,5 @@ public class ShortMovieResponse {
     private String title;
     private Integer year;
     private Float rating;
-
+	private String posterUrl;
 }

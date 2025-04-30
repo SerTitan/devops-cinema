@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: sertitan
+    groups: sudo
+    shell: /bin/bash
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    ssh_authorized_keys:
+      - <открытый ssh ключ сгенерированный локально через ssh-keygen -t ed25519 -C>
