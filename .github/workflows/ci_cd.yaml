@@ -3,7 +3,7 @@ name: CI-CD jobs
 on:
   push:
     branches:
-      - '**'
+      - 'main'
 
 jobs:
   build-backend:
@@ -38,10 +38,38 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Test backend
+      - name: Run backend tests
         run: |
           cd backend
           mvn clean verify
+
+  sonar-check:
+    needs: test-backend
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Sonar packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Run SonarQube analysis
+        run: |
+          cd backend
+          mvn verify sonar:sonar \
+            -Dsonar.projectKey=cinema \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   build-frontend:
     runs-on: ubuntu-22.04
@@ -87,7 +115,7 @@ jobs:
           npm run test
 
   deploy:
-    needs: [test-backend, test-frontend]
+    needs: [sonar-check, test-frontend]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -105,10 +133,10 @@ jobs:
 
       - name: Build frontend image
         run: |
-          docker build --build-arg VITE_API_BASE=http://localhost:8080 -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest ./frontend
+          docker build --build-arg VITE_API_BASE=http://localhost:8080 \
+            -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest ./frontend
 
       - name: Push images
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest
-

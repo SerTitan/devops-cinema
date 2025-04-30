@@ -1,0 +1,3 @@
+- https://yandex.cloud/ru/docs/tutorials/infrastructure-management/terraform-quickstart#linux_2
+- .terraformrc надо положить в ~/
+- meta.txt и main.tf в ~/AppData/Roaming
