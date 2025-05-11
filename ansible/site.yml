@@ -1,0 +1,11 @@
+- name: Create Kubernetes Cluster
+  hosts: all
+  become: true
+  roles:
+    - k8s-cluster
+
+- name: Create Cinema Application
+  hosts: all
+  connection: local
+  roles:
+    - cinema-app

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cinema-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-db
+  template:
+    metadata:
+      labels:
+        app: cinema-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15.1-alpine
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: cinemadb
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: cinemadb-storage
+              mountPath: /var/lib/postgresql/data
+          command: [ "postgres", "-c", "wal_level=logical" ]
+      volumes:
+        - name: cinemadb-storage
+          persistentVolumeClaim:
+            claimName: cinemadb-data-pvc

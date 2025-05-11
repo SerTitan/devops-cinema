@@ -4,8 +4,6 @@
   vars:
     archive_path: "~/devops-cinema.zip"        # Путь до архива на локальной машине
     project_dir: "devops-cinema" # Папка на ВМ после распаковки
-    dockerhub_username: "arcturs"         # <-- поменяй на свой логин
-    dockerhub_password: <dockerhub_password>              # <-- поменяй на свой токен
 
   tasks:
     - name: Установка unzip
@@ -34,19 +32,7 @@
         dest: "{{ project_dir }}"
         remote_src: yes
 
-    - name: Логин в DockerHub
-      community.docker.docker_login:
-        username: "{{ dockerhub_username }}"
-        password: "{{ dockerhub_password }}"
-
     - name: Сборка и запуск docker-compose
       command: docker compose up -d
-      args:
-        chdir: "{{ project_dir }}"
-
-    - name: Публикация образов на DockerHub
-      shell: |
-        docker compose build
-        docker compose push
       args:
         chdir: "{{ project_dir }}"
