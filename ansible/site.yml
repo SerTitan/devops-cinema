@@ -1,0 +1,11 @@
+- name: Установка Docker на ВМ
+  hosts: vm
+  become: true
+  roles:
+    - docker-install
+
+- name: Развертывание проекта из архива и выкладка в DockerHub
+  hosts: all
+  become: true
+  roles:
+    - docker-deploy
