@@ -4,11 +4,11 @@
   roles:
     - cinema-app
 
-#- name: Установка Docker на ВМ
-#  hosts: vm
-#  become: true
-#  roles:
-#    - docker-install
+- name: Установка Docker на ВМ
+  hosts: vm
+  become: true
+  roles:
+    - docker-install
 
 - name: Запуск приложения в Docker и деплой в Docker Hub
   hosts: all
