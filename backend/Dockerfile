@@ -6,7 +6,7 @@ COPY src /opt/build/cinemaback/src/
 RUN mvn -f /opt/build/cinemaback/pom.xml clean package -B -DskipTests
 
 
-FROM eclipse-temurin:17-jdk-alpine
+FROM --platform=linux/amd64 eclipse-temurin:17-jdk-alpine
 WORKDIR /opt/app/cinemaback
 COPY --from=BUILDER /opt/build/cinemaback/target/*.jar /opt/app/cinemaback/cinemaback.jar
 
