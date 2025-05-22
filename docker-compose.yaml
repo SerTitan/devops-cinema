@@ -14,7 +14,6 @@ services:
 
   cinema-backend:
     image: arcturs/cinema_backend
-    platform: linux/amd64
     container_name: cinema-backend
     ports:
       - "8080:8080"
