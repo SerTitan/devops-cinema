@@ -100,9 +100,9 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build backend image
+        uses: docker/setup-buildx-action@v1
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 \
-            -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest ./backend
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest ./backend
 
       - name: Build frontend image
         run: |
