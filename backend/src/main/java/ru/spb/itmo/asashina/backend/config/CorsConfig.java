@@ -16,7 +16,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:3000",
-                                "http://cinema-frontend"
+                                "http://cinema-frontend",
+                                "http://158.160.157.207:3000"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*");
