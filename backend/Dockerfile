@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 maven:3.9-eclipse-temurin-23-alpine as BUILDER
+FROM --platform=linux/amd64,linux/arm64 maven:3.9-eclipse-temurin-23-alpine as BUILDER
 ARG VERSION=0.0.1-SNAPSHOT
 WORKDIR /opt/build/cinemaback
 COPY pom.xml /opt/build/cinemaback/
