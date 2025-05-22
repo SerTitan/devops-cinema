@@ -103,14 +103,14 @@ jobs:
 
       - name: Build backend image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest ./backend
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_backend:latest ./backend
 
       - name: Build frontend image
         run: |
           docker build --build-arg VITE_API_BASE=http://158.160.157.207:8080 \
-            -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest ./frontend
+            -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest ./frontend
 
       - name: Push images
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_backend:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest
