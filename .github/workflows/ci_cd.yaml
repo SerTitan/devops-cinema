@@ -119,6 +119,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
           context: ./backend
+          builder: ${{ steps.buildx.outputs.name }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
@@ -128,3 +129,4 @@ jobs:
           context: ./frontend
           build-args: VITE_API_BASE=http://158.160.157.207:8080
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest
+          builder: ${{ steps.buildx.outputs.name }}

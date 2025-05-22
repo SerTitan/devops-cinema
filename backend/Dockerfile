@@ -3,7 +3,7 @@ ARG VERSION=0.0.1-SNAPSHOT
 WORKDIR /opt/build/cinemaback
 COPY pom.xml /opt/build/cinemaback/
 COPY src /opt/build/cinemaback/src/
-RUN mvn -f /opt/build/cinemaback/pom.xml clean package -B -DskipTests
+RUN mvn -f /opt/build/cinemaback/pom.xml clean package -B -DskipTests -Djavacpp.platform=linux-x86_64
 
 
 FROM --platform=linux/amd64 eclipse-temurin:17-jdk-alpine
