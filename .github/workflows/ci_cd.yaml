@@ -107,14 +107,14 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          build-contexts: ./backend
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
+          context: ./backend
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
           push: true
-          build-contexts: ./backend
+          context: ./frontend
           build-args: VITE_API_BASE=http://158.160.157.207:8080
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest
