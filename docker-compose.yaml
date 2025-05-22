@@ -1,6 +1,7 @@
 services:
   cinema-db:
     image: postgres:15.1-alpine
+    platform: linux/amd64
     ports:
       - "5432:5432"
     container_name: postgres-1
@@ -14,6 +15,7 @@ services:
 
   cinema-backend:
     image: arcturs/cinema_backend
+    platform: linux/amd64
     container_name: cinema-backend
     ports:
       - "8080:8080"
