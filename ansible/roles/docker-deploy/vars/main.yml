@@ -1,4 +1,3 @@
-archive_path: "~/devops-cinema.zip"         # Путь до архива на локальной машине
-project_dir: "devops-cinema"                # Папка на ВМ после распаковки
+project_dir: "./devops-cinema"                # Папка на ВМ после распаковки
 dockerhub_username: "arcturs"               # <-- поменяй на свой логин
-dockerhub_password: <dockerhub_password>
+dockerhub_password: "TyMZ3qvs#"

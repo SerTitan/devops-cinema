@@ -1,10 +1,16 @@
-- name: Установка Docker на ВМ
+- name: Развертывание проекта из архива
   hosts: vm
   become: true
   roles:
-    - docker-install
+    - cinema-app
 
-- name: Развертывание проекта из архива и выкладка в DockerHub
+#- name: Установка Docker на ВМ
+#  hosts: vm
+#  become: true
+#  roles:
+#    - docker-install
+
+- name: Запуск приложения в Docker и деплой в Docker Hub
   hosts: all
   become: true
   roles:
