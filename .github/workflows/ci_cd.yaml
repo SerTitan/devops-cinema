@@ -110,5 +110,5 @@ jobs:
 
       - name: Push images
         run: |
-          docker push --platform linux/amd64 ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
+          docker push --platform linux/arm64 ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-frontend:latest
