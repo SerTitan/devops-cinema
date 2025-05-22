@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'openjdk'
+          distribution: 'temurin'
           cache: 'maven'
 
       - name: Build backend
@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'openjdk'
+          distribution: 'temurin'
           cache: 'maven'
 
       - name: Run backend tests
