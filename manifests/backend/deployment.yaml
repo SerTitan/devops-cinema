@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cinema-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-backend
+  template:
+    metadata:
+      labels:
+        app: cinema-backend
+    spec:
+      containers:
+        - name: backend
+          image: arcturs/cinema_backend
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          env:
+            - name: DATABASE_HOST
+              value: cinema-db
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_NAME
+              value: cinemadb
+            - name: DATABASE_USERNAME
+              value: postgres
+            - name: DATABASE_PASSWORD
+              value: postgres

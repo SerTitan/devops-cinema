@@ -1,0 +1,2 @@
+archive_path: "~/IdeaProjects/devops-cinema.zip"         # Путь до архива на локальной машине
+project_dir: "./"

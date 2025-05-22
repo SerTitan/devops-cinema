@@ -1,29 +1,3 @@
-- name: Установка unzip
-  apt:
-    name:
-      - unzip
-    update_cache: yes
-
-- name: Создание директории для проекта
-  file:
-    path: "{{ project_dir }}"
-    state: directory
-    owner: sertitan
-    group: sertitan
-    mode: 0755
-
-- name: Копирование архива проекта на сервер
-  copy:
-    src: "{{ archive_path }}"
-    dest: "/tmp/devops-cinema.zip"
-    mode: 0644
-
-- name: Распаковка архива
-  unarchive:
-    src: "/tmp/devops-cinema.zip"
-    dest: "{{ project_dir }}"
-    remote_src: yes
-
 - name: Логин в DockerHub
   community.docker.docker_login:
     username: "{{ dockerhub_username }}"
