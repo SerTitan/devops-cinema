@@ -101,7 +101,7 @@ jobs:
 
       - name: Build backend image
         run: |
-          docker build --platform: linux/amd64,linux/arm64 \
+          docker buildx build --platform: linux/amd64,linux/arm64 \
             -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema-backend:latest ./backend
 
       - name: Build frontend image
