@@ -107,8 +107,7 @@ jobs:
 
       - name: Build frontend image
         run: |
-          docker build --build-arg VITE_API_BASE=http://158.160.157.207:8080 \
-            -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest ./frontend
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest ./frontend
 
       - name: Push images
         run: |
