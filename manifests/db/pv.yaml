@@ -12,3 +12,11 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   accessModes:
     - ReadWriteOnce
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - fv4f3sh3tpuubt58232j
