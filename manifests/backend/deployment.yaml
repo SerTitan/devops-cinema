@@ -27,7 +27,7 @@ spec:
               memory: 512Mi
           env:
             - name: DATABASE_HOST
-              value: cinema-db
+              value: 158.160.157.207
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_NAME
