@@ -15,6 +15,13 @@ spec:
       securityContext:
         runAsUser: 999
         fsGroup: 999
+      initContainers:
+        - name: fix-data-dir
+          image: alpine:3.18
+          command: [ "sh", "-c", "mkdir -p /var/lib/postgresql/data && chown -R 999:999 /var/lib/postgresql/data" ]
+          volumeMounts:
+            - name: cinemadb-storage
+              mountPath: /var/lib/postgresql/data
       containers:
         - name: postgres
           image: postgres:15.1-alpine
