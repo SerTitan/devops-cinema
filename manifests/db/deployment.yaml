@@ -12,6 +12,9 @@ spec:
       labels:
         app: cinema-db
     spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
       containers:
         - name: postgres
           image: postgres:15.1-alpine

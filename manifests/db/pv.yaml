@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: cinemadb-data-pv
 spec:
-  storageClassName: ""
+  storageClassName: standard
   capacity:
     storage: 2Gi
   accessModes:
