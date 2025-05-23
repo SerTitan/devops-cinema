@@ -24,6 +24,11 @@ spec:
             - "sh"
             - "-c"
             - |
+              if [ -n "$(ls -A /var/lib/postgresql/data)" ]; then
+              echo "Очистка старых данных..."
+              rm -rf /var/lib/postgresql/data/*
+              fi
+              
               if [ -z "$(ls -A /var/lib/postgresql/data)" ]; then
                 echo "Инициализация базы данных..."
                 initdb -D /var/lib/postgresql/data
