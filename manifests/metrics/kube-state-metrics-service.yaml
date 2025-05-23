@@ -8,7 +8,9 @@ metadata:
 spec:
   type: NodePort  # Для доступа извне кластера
   ports:
-    - port: 8082
+    - name: http
+      protocol: TCP
+      port: 8082
       targetPort: 8082
       nodePort: 30083
   selector:
