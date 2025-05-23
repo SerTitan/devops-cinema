@@ -29,7 +29,7 @@ public class CorsConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://158.160.157.207:3000",
-                "http://158.160.157.207:30001"));
+                "http://158.160.157.207:30010"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
