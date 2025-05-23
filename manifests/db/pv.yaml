@@ -8,7 +8,7 @@ spec:
     storage: 2Gi
   volumeMode: Filesystem
   local:
-    path: /var/lib/postgresql/data
+    path: /mnt/data
   persistentVolumeReclaimPolicy: Retain
   accessModes:
     - ReadWriteOnce

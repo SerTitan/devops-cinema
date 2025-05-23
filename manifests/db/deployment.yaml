@@ -16,12 +16,19 @@ spec:
         runAsUser: 999
         fsGroup: 999
       initContainers:
-        - name: fix-data-dir
-          image: alpine:3.18
-          command: [ "sh", "-c", "mkdir -p /var/lib/postgresql/data && chown -R 999:999 /var/lib/postgresql/data" ]
-          volumeMounts:
-            - name: cinemadb-storage
-              mountPath: /var/lib/postgresql/data
+        - name: init-db
+          image: postgres:15.1-alpine
+          command:
+            - "sh"
+            - "-c"
+            - |
+              # Проверяем, пуста ли директория данных
+              if [ -z "$(ls -A /var/lib/postgresql/data)" ]; then
+                echo "Инициализация базы данных..."
+                initdb -D /var/lib/postgresql/data
+                echo "wal_level = logical" >> /var/lib/postgresql/data/postgresql.conf
+              fi
+              chown -R 999:999 /var/lib/postgresql/data
       containers:
         - name: postgres
           image: postgres:15.1-alpine
