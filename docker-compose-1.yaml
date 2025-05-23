@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: cinemadb
-    command: ["postgres", "-c", "wal_level=logical"]
+    command: [ "postgres", "-c", "wal_level=logical" ]
     volumes:
       - /mnt/data/pg:/var/lib/postgresql/data
 
@@ -24,6 +24,13 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yaml'
       - '--storage.tsdb.path=/'
+
+  prometheus-pushgateway:
+    image: prom/pushgateway:v3.2.0
+    container_name: prometheus-pushgateway
+    user: "$UID:$GID"
+    ports:
+      - "9091:9091"
 
   grafana:
     image: grafana/grafana:11.6.0
