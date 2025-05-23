@@ -29,7 +29,7 @@ spec:
           command: ["postgres", "-c", "wal_level=logical"]
           volumeMounts:
             - name: cinemadb-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /mnt/data
       volumes:
         - name: cinemadb-storage
           persistentVolumeClaim:
