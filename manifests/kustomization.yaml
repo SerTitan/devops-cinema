@@ -1,5 +1,4 @@
 resources:
-  - db/storage.yaml
   - db/pv.yaml
   - db/pvc.yaml
   - db/deployment.yaml
