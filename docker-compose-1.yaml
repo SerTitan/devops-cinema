@@ -1,0 +1,13 @@
+services:
+  cinema-db:
+    image: postgres:15.1-alpine
+    ports:
+      - "5432:5432"
+    container_name: postgres-1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cinemadb
+    command: ["postgres", "-c", "wal_level=logical"]
+    volumes:
+      - /mnt/data/pg:/var/lib/postgresql/data
