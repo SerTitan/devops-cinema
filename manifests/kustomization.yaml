@@ -1,5 +1,5 @@
 resources:
-  - db/pvc.yaml
+  - db/pv.yaml
   - db/deployment.yaml
   - db/service.yaml
   - backend/deployment.yaml
