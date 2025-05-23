@@ -35,7 +35,7 @@
 #    namespace: cinema-app
 #    src: "{{ role_path }}/files/manifests/db/{{ item }}"
 #  loop:
-#    - pv.yaml
+#    - pvc.yaml
 #    - deployment.yaml
 #    - service.yaml
 #
