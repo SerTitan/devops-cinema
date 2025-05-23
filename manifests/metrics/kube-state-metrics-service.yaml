@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-state-metrics
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: kube-state-metrics
+spec:
+  type: NodePort  # Для доступа извне кластера
+  ports:
+    - port: 8083
+      targetPort: 8083
+      nodePort: 30083
+  selector:
+    app.kubernetes.io/name: kube-state-metrics

@@ -13,6 +13,7 @@ import ru.spb.itmo.asashina.backend.model.request.ReviewRequest;
 import ru.spb.itmo.asashina.backend.model.response.MovieResponse;
 import ru.spb.itmo.asashina.backend.model.response.ReviewResponse;
 import ru.spb.itmo.asashina.backend.model.response.ShortMovieResponse;
+import ru.spb.itmo.asashina.backend.config.MetricService;
 import ru.spb.itmo.asashina.backend.service.MovieService;
 
 @RestController
@@ -21,6 +22,7 @@ import ru.spb.itmo.asashina.backend.service.MovieService;
 public class MovieController {
 
     private final MovieService movieService;
+    private final MetricService metricService;
 
     @GetMapping("")
     @Operation(summary = "Поиск всех фильмов", tags = "Movie Controller", responses = {
@@ -30,6 +32,7 @@ public class MovieController {
             })
     })
     public ResponseEntity<?> getAllMovies(@RequestParam(required = false) String search) {
+        metricService.incrementGetMoviesRequestCounter();
         return ResponseEntity.ok(movieService.getAllMovies(search));
     }
 
@@ -41,6 +44,7 @@ public class MovieController {
             })
     })
     public ResponseEntity<?> getMovieById(@PathVariable Long id) {
+        metricService.incrementGetMovieRequestCounter();
         return ResponseEntity.ok(movieService.getMovie(id));
     }
 
@@ -52,6 +56,7 @@ public class MovieController {
             })
     })
     public ResponseEntity<?> addReview(@PathVariable Long id, @RequestBody @Valid ReviewRequest request) {
+        metricService.incrementCreateMovieReviewRequestCounter();
         return ResponseEntity.ok(movieService.createReview(id, request));
     }
 
@@ -67,12 +72,14 @@ public class MovieController {
             @PathVariable Long reviewId,
             @RequestBody @Valid ReviewRequest request) {
 
+        metricService.incrementEditMovieReviewRequestCounter();
         return ResponseEntity.ok(movieService.updateReview(id, reviewId, request));
     }
 
     @DeleteMapping("/{id}/review/{reviewId}")
     @Operation(summary = "Удаление отзыва", tags = "Movie Controller")
     public ResponseEntity<?> deleteReview(@PathVariable Long id, @PathVariable Long reviewId) {
+        metricService.incrementDeleteMovieReviewRequestCounter();
         movieService.deleteReview(id, reviewId);
         return ResponseEntity.noContent().build();
     }
