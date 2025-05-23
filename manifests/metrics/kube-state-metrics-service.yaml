@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: kube-state-metrics
 spec:
-  type: NodePort  # Для доступа извне кластера
+  type: NodePort
   ports:
     - name: http
       protocol: TCP
