@@ -1,0 +1,9 @@
+resources:
+  - db/pvc.yaml
+  - db/deployment.yaml
+  - db/service.yaml
+  - backend/deployment.yaml
+  - backend/service.yaml
+  - backend/hpa.yaml
+  - frontend/deployment.yaml
+  - frontend/service.yaml
