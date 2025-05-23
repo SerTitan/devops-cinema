@@ -155,6 +155,7 @@
 						<exclude>**/config/*</exclude>
 						<exclude>**/model/*</exclude>
 						<exclude>**/exception/*</exclude>
+						<exclude>**/scheduler/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
