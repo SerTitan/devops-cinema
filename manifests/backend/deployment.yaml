@@ -1,6 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8081"
+    prometheus.io/scheme: "http"
   name: cinema-backend
 spec:
   replicas: 1
@@ -9,11 +14,6 @@ spec:
       app: cinema-backend
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "8081"
-        prometheus.io/scheme: "http"
       labels:
         app: cinema-backend
     spec:
