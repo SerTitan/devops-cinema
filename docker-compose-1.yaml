@@ -26,7 +26,7 @@ services:
       - '--storage.tsdb.path=/'
 
   prometheus-pushgateway:
-    image: prom/pushgateway:v3.2.0
+    image: prom/pushgateway
     container_name: prometheus-pushgateway
     user: "$UID:$GID"
     ports:
