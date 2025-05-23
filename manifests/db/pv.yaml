@@ -3,13 +3,11 @@ kind: PersistentVolume
 metadata:
   name: cinemadb-data-pv
 spec:
-  storageClassName: local-storage
+  storageClassName: manual
   capacity:
     storage: 2Gi
-  volumeMode: Filesystem
-  local:
+  hostPath:
     path: /mnt/data
-  persistentVolumeReclaimPolicy: Retain
   accessModes:
     - ReadWriteOnce
   nodeAffinity:
