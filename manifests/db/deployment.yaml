@@ -24,12 +24,14 @@ spec:
               value: postgres
             - name: POSTGRES_DB
               value: cinemadb
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           ports:
             - containerPort: 5432
           command: ["postgres", "-c", "wal_level=logical"]
           volumeMounts:
             - name: cinemadb-storage
-              mountPath: /mnt/data
+              mountPath: /var/lib/postgresql/data
       volumes:
         - name: cinemadb-storage
           persistentVolumeClaim:
