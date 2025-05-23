@@ -15,7 +15,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "30083"
+        prometheus.io/port: "8082"
         prometheus.io/scheme: "http"
       labels:
         app.kubernetes.io/name: kube-state-metrics
