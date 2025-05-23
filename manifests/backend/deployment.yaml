@@ -41,3 +41,7 @@ spec:
               value: postgres
             - name: DATABASE_PASSWORD
               value: postgres
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
