@@ -28,7 +28,8 @@ public class CorsConfig {
         var configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "http://158.160.157.207:3000"));
+                "http://158.160.157.207:3000",
+                "http://158.160.157.207:30001"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
