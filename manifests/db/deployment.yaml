@@ -12,31 +12,6 @@ spec:
       labels:
         app: cinema-db
     spec:
-      securityContext:
-        runAsUser: 999
-        fsGroup: 999
-      initContainers:
-        - name: init-db
-          image: postgres:15.1-alpine
-          securityContext:
-            runAsUser: 999
-          command:
-            - "sh"
-            - "-c"
-            - |
-              if [ -n "$(ls -A /var/lib/postgresql/data)" ]; then
-              echo "Очистка старых данных..."
-              rm -rf /var/lib/postgresql/data/*
-              fi
-              
-              if [ -z "$(ls -A /var/lib/postgresql/data)" ]; then
-                echo "Инициализация базы данных..."
-                initdb -D /var/lib/postgresql/data
-                echo "wal_level = logical" >> /var/lib/postgresql/data/postgresql.conf
-              fi
-          volumeMounts:
-            - name: cinemadb-storage
-              mountPath: /var/lib/postgresql/data
       containers:
         - name: postgres
           image: postgres:15.1-alpine
@@ -49,6 +24,7 @@ spec:
               value: cinemadb
           ports:
             - containerPort: 5432
+          command: ["postgres", "-c", "wal_level=logical"]
           volumeMounts:
             - name: cinemadb-storage
               mountPath: /var/lib/postgresql/data
