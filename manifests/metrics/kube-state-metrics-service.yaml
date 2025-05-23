@@ -8,8 +8,8 @@ metadata:
 spec:
   type: NodePort  # Для доступа извне кластера
   ports:
-    - port: 8083
-      targetPort: 8083
+    - port: 8082
+      targetPort: 8082
       nodePort: 30083
   selector:
     app.kubernetes.io/name: kube-state-metrics
