@@ -12,5 +12,14 @@ scrape_configs:
 
   - job_name: 'cinema-backend'
     metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: [ "158.160.157.207:30002" ]
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [ __meta_kubernetes_pod_annotation_prometheus_io_scrape ]
+        action: keep
+        regex: true
+      - source_labels: [ __meta_kubernetes_pod_annotation_prometheus_io_port ]
+        action: replace
+        target_label: __address__
+        regex: (.+)
+        replacement: ${1}:8081

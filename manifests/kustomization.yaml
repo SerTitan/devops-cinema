@@ -6,7 +6,6 @@ resources:
   - metrics/node-exporter-service.yaml
   - backend/deployment.yaml
   - backend/service.yaml
-  - backend/metric-service.yaml
   - backend/hpa.yaml
   - frontend/deployment.yaml
   - frontend/service.yaml
