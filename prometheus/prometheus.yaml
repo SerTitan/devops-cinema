@@ -11,6 +11,6 @@ scrape_configs:
       - targets: [ "158.160.157.207:30100" ]
 
   - job_name: 'cinema-backend'
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ "158.160.157.207:30002" ]
-        metrics_path: '/actuator/prometheus'
