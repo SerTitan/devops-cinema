@@ -43,7 +43,7 @@ public class MetricScheduler {
                     .body(new ByteArrayResource(metrics.getBytes(StandardCharsets.UTF_8)))
                     .retrieve()
                     .toBodilessEntity();
-            log.info("Отправили следующие метрики в PushGateway. Код ответа: {}. \n{}", rs.getStatusCode(), metrics);
+            log.debug("Отправили следующие метрики в PushGateway. Код ответа: {}. \n{}", rs.getStatusCode(), metrics);
         } catch (Exception exception) {
             log.error("Ошибка при отправке метрик в PushGateway", exception);
         }
