@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: arcturs/cinema_frontend
+          image: sertitanius/cinema_frontend
           ports:
             - containerPort: 80
           env:

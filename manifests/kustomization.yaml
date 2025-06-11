@@ -9,3 +9,6 @@ resources:
   - backend/hpa.yaml
   - frontend/deployment.yaml
   - frontend/service.yaml
+  - bot/deployment.yaml
+  - bot/service.yaml
+  - bot/secret.yaml

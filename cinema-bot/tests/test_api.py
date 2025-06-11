@@ -3,7 +3,6 @@ import importlib
 import api
 
 
-# ────────── stub-режим ──────────
 @pytest.mark.asyncio
 async def test_stub_functions(monkeypatch):
     async def movies():
@@ -24,7 +23,6 @@ async def test_stub_functions(monkeypatch):
     assert (await api.add_review(1, "X", "Y"))["status"] == "ok"
 
 
-# ────────── http-ветка ──────────
 class _Resp:
     async def __aenter__(self): return self
     async def __aexit__(self, exc_type, exc, tb): pass

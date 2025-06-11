@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: arcturs/cinema_backend
+          image: sertitanius/cinema_backend
           ports:
             - containerPort: 8080
             - containerPort: 8081

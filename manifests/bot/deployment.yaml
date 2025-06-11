@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cinema-bot
+  labels:
+    app: cinema-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-bot
+  template:
+    metadata:
+      labels:
+        app: cinema-bot
+    spec:
+      containers:
+        - name: cinema-bot
+          image: sertitanius/cinema_bot
+          imagePullPolicy: Always
+          env:
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cinema-bot-secrets
+                  key: bot-token
+            - name: API_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: cinema-bot-secrets
+                  key: api-base
+          ports:
+            - containerPort: 8080

@@ -6,9 +6,9 @@ def _unfreeze(self, name, value):
     object.__setattr__(self, name, value)
 
 for cls in (types.Message, types.CallbackQuery, Update):
-    cls.__setattr__ = _unfreeze  # type: ignore[assignment]
+    cls.__setattr__ = _unfreeze
     if not hasattr(cls, "update_id"):
-        cls.update_id = property(lambda self: 0)  # type: ignore[arg-type]
+        cls.update_id = property(lambda self: 0)
 
 if not hasattr(Dispatcher, "_cb_patch"):
     orig = Dispatcher.feed_update
@@ -26,5 +26,5 @@ if not hasattr(Dispatcher, "_cb_patch"):
             await msg.answer("")
         return res
 
-    Dispatcher.feed_update = feed  # type: ignore[assignment]
+    Dispatcher.feed_update = feed
     Dispatcher._cb_patch = True

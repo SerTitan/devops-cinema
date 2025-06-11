@@ -7,7 +7,6 @@ from unittest.mock import AsyncMock, patch
 from handlers import register_handlers, ReviewStates
 
 
-# helpers
 def _msg(text: str) -> types.Message:
     return types.Message(
         message_id=1,
@@ -30,7 +29,6 @@ def dispatcher():
     return dp
 
 
-# ────────── базовые сценарии ──────────
 @pytest.mark.asyncio
 async def test_start(dispatcher):
     bot = AsyncMock(spec=Bot)
@@ -54,16 +52,13 @@ async def test_movies_empty(dispatcher):
     m = _msg("/movies"); m.answer = AsyncMock()
     with patch("api.get_movies", return_value=[]):
         await dispatcher.feed_update(bot, _wrap(m, bot))
-    # вызов происходит из fallback-патча – аргумент может быть ""
     assert m.answer.called
 
 
-# ────────── callback + FSM ──────────
 @pytest.mark.asyncio
 async def test_reviews_and_add(dispatcher):
     bot = AsyncMock(spec=Bot)
 
-    # callback review_
     m = _msg("placeholder"); m.answer = AsyncMock()
     cb = types.CallbackQuery(
         id="1", from_user=types.User(id=1, is_bot=False, first_name="U"),
@@ -73,7 +68,6 @@ async def test_reviews_and_add(dispatcher):
         await dispatcher.feed_update(bot, _wrap(cb, bot))
     assert m.answer.called
 
-    # fsm add review
     review = _msg("Good!"); review.answer = AsyncMock()
     ctx = dispatcher.fsm.get_context(bot=bot, chat_id=1, user_id=1)
     await ctx.set_state(ReviewStates.waiting_for_text)

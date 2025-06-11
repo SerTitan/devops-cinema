@@ -113,12 +113,6 @@ jobs:
           source venv/bin/activate
           PYTHONPATH=. pytest --cov=. --cov-report=xml
 
-      - name: Upload bot coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: bot-coverage
-          path: cinema-bot/coverage.xml
-
   sonarqube-combined-scan:
     needs: [test-frontend, test-backend, test-bot]
     runs-on: ubuntu-22.04
@@ -163,12 +157,9 @@ jobs:
       - name: Run SonarQube self-hosted scan
         run: |
           npx sonar-scanner \
-            -Dsonar.projectKey=SerTitan_devops-cinema_AZdcTvT_OG_0uaBJEJFe \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dproject.settings=sonar-project.properties \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=backend/target/site/jacoco/jacoco.xml \
-            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info \
-            -Dsonar.python.coverage.reportPaths=cinema-bot/coverage.xml \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.qualitygate.wait=true
 
   docker-hub-push:
@@ -193,7 +184,43 @@ jobs:
           docker build --build-arg VITE_API_BASE=http://158.160.157.207:30001 \
             -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest ./frontend
 
+      - name: Build bot image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_bot:latest ./cinema-bot
+
       - name: Push images
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_backend:latest
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_frontend:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinema_bot:latest
+
+  deploy:
+    needs: [docker-hub-push]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Copy updated manifests to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "manifests/**"
+          target: "/root/sertitan/devops-cinema-main"
+          strip_components: 0  # сохранить структуру папок как есть
+
+      - name: SSH into server and apply manifests
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /root/sertitan/devops-cinema-main/manifests
+            kubectl delete --all pods
+            kubectl apply -f backend/
+            kubectl apply -f frontend/
+            kubectl apply -f bot/
+
