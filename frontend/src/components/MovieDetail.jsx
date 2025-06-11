@@ -44,9 +44,12 @@ export default function MovieDetail() {
               <h1 className="text-3xl font-bold text-white">{movie.title}</h1>
               <p className="text-gray-400">{movie.year} • {movie.genre}</p>
             </div>
-            <span className={`${ratingColor(movie.rating)} flex items-center justify-center w-14 h-14 rounded-full text-xl font-bold text-white`}>
-              {movie.rating}
-            </span>
+            <span
+				data-testid="rating-badge"
+				className={`${ratingColor(movie.rating)} flex items-center justify-center w-14 h-14 rounded-full text-xl font-bold text-white`}
+				>
+				{movie.rating}
+			</span>
           </div>
 
           <section className="my-6">

@@ -43,7 +43,7 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          mvn clean verify -Djavacpp.platform=linux-x86_64
+          mvn clean verify -Djacoco.haltOnFailure=false
 
   build-frontend:
     runs-on: ubuntu-22.04
@@ -88,8 +88,48 @@ jobs:
           cd frontend
           npm run test
 
-  deploy:
+  sonarqube-combined-scan:
     needs: [test-frontend, test-backend]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Install frontend deps and generate coverage
+        run: |
+          cd frontend
+          npm ci
+          npm run coverage
+
+      - name: Rebuild backend with reports
+        run: |
+          cd backend
+          mvn verify -DskipTests=false
+
+      - name: Run SonarQube self-hosted scan
+        run: |
+          npx sonar-scanner \
+            -Dsonar.projectKey=SerTitan_devops-cinema_AZdcTvT_OG_0uaBJEJFe \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=backend/target/site/jacoco/jacoco.xml \
+            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info \
+            -Dsonar.qualitygate.wait=true
+
+  docker-hub-push:
+    needs: [sonarqube-combined-scan]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
