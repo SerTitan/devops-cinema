@@ -36,7 +36,7 @@ public class MovieService {
         this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
         this.botRestClient = builder
-                .baseUrl("http://localhost:2000/event")
+                .baseUrl("http://158.160.157.207:30020/event")
                 .build();
     }
 
