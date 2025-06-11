@@ -88,8 +88,39 @@ jobs:
           cd frontend
           npm run test
 
+  test-bot:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install bot dependencies
+        run: |
+          cd cinema-bot
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot tests with coverage
+        run: |
+          cd cinema-bot
+          source venv/bin/activate
+          PYTHONPATH=. pytest --cov=. --cov-report=xml
+
+      - name: Upload bot coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bot-coverage
+          path: cinema-bot/coverage.xml
+
   sonarqube-combined-scan:
-    needs: [test-frontend, test-backend]
+    needs: [test-frontend, test-backend, test-bot]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -107,6 +138,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install frontend deps and generate coverage
         run: |
           cd frontend
@@ -118,6 +154,12 @@ jobs:
           cd backend
           mvn verify -DskipTests=false
 
+      - name: Recreate bot coverage
+        run: |
+          cd cinema-bot
+          pip install -r requirements.txt
+          PYTHONPATH=. pytest --cov=. --cov-report=xml
+
       - name: Run SonarQube self-hosted scan
         run: |
           npx sonar-scanner \
@@ -126,6 +168,7 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=backend/target/site/jacoco/jacoco.xml \
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info \
+            -Dsonar.python.coverage.reportPaths=cinema-bot/coverage.xml \
             -Dsonar.qualitygate.wait=true
 
   docker-hub-push:

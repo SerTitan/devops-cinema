@@ -1,3 +1,7 @@
 /backend/target/**
 /frontend/node_modules/**
 coverage
+.pytest_cache
+__pycache__
+.coverage
+venv

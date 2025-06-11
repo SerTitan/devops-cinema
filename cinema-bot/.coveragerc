@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = 
+    cinema-bot
+omit =
+    */tests/*
+    */__init__.py
