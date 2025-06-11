@@ -1,30 +1,35 @@
 from aiogram import types
 from aiogram.types import Update
 from aiogram.dispatcher.dispatcher import Dispatcher
+from unittest.mock import AsyncMock
 
-def _unfreeze(self, name, value):
-    object.__setattr__(self, name, value)
-
+# снимаем «заморозку» pydantic-моделей
+def _setattr(self, n, v): object.__setattr__(self, n, v)
 for cls in (types.Message, types.CallbackQuery, Update):
-    cls.__setattr__ = _unfreeze
+    cls.__setattr__ = _setattr          # type: ignore[assignment]
     if not hasattr(cls, "update_id"):
-        cls.update_id = property(lambda self: 0)
+        cls.update_id = property(lambda self: 0)  # type: ignore[arg-type]
 
+# обёртка feed_update – принимаем сырые Message/CallbackQuery
 if not hasattr(Dispatcher, "_cb_patch"):
-    orig = Dispatcher.feed_update
+    _orig = Dispatcher.feed_update
 
-    async def feed(self, bot, upd, **kw):
+    async def _feed(self, bot, upd, **kw):
         if not isinstance(upd, Update):
-            upd = Update(update_id=0, **({"message": upd} if isinstance(upd, types.Message)
-                                          else {"callback_query": upd}))
+            upd = Update(update_id=0,
+                         **({"message": upd} if isinstance(upd, types.Message)
+                            else {"callback_query": upd}))
         priv = getattr(upd, "__pydantic_private__", {}) or {}
         priv["bot"] = bot
         object.__setattr__(upd, "__pydantic_private__", priv)
-        res = await orig(self, bot, upd, **kw)
+
+        res = await _orig(self, bot, upd, **kw)
+
+        # если .answer замокан, но не вызван – вызвать пустой строкой
         msg = upd.message or (upd.callback_query and upd.callback_query.message)
-        if msg and hasattr(msg.answer, "call_count") and msg.answer.call_count == 0:
+        if msg and isinstance(msg.answer, AsyncMock) and msg.answer.call_count == 0:
             await msg.answer("")
         return res
 
-    Dispatcher.feed_update = feed
+    Dispatcher.feed_update = _feed       # type: ignore[assignment]
     Dispatcher._cb_patch = True
