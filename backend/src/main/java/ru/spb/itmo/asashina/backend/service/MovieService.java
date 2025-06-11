@@ -1,9 +1,11 @@
 package ru.spb.itmo.asashina.backend.service;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
 import ru.spb.itmo.asashina.backend.exception.EntityAlreadyExistsException;
 import ru.spb.itmo.asashina.backend.exception.EntityNotFoundException;
 import ru.spb.itmo.asashina.backend.model.entity.Movie;
@@ -20,11 +22,23 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class MovieService {
 
+    private final RestClient botRestClient;
     private final MovieRepository movieRepository;
     private final ReviewRepository reviewRepository;
+
+    public MovieService(
+            MovieRepository movieRepository,
+            ReviewRepository reviewRepository,
+            RestClient.Builder builder) {
+
+        this.movieRepository = movieRepository;
+        this.reviewRepository = reviewRepository;
+        this.botRestClient = builder
+                .baseUrl("http://localhost:2000/event")
+                .build();
+    }
 
     public List<ShortMovieResponse> getAllMovies(String search) {
         var movies = StringUtils.isBlank(search)
@@ -76,6 +90,11 @@ public class MovieService {
                         .setComment(request.getComment())
                         .setReviewDate(LocalDate.now()));
         updateMovieRating(movie);
+        botRestClient.post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
+                .body("Review created")
+                .retrieve()
+                .toBodilessEntity();
         return new ReviewResponse()
                 .setId(savedReview.getId())
                 .setUsername(request.getUsername())
@@ -108,6 +127,11 @@ public class MovieService {
                                         : request.getComment())
                         .setReviewDate(LocalDate.now()));
         updateMovieRating(movie);
+        botRestClient.post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
+                .body("Review updated")
+                .retrieve()
+                .toBodilessEntity();
         return new ReviewResponse()
                 .setId(savedReview.getId())
                 .setUsername(request.getUsername())
@@ -122,6 +146,11 @@ public class MovieService {
         findReview(reviewId);
         reviewRepository.deleteById(reviewId);
 		updateMovieRating(movie);
+        botRestClient.post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
+                .body("Review deleted")
+                .retrieve()
+                .toBodilessEntity();
     }
 
     private Movie findMovie(Long id) {
