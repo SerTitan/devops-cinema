@@ -21,3 +21,4 @@ management:
   endpoints.web.exposure.include: health,info,prometheus,metrics,loggers
 
 pushgateway.url: http://158.160.157.207:9091/metrics/job/backend-metrics-collection-job/service/cinema-backend/instance/${POD_NAME:cinema-backend}
+bot.url: http://158.160.157.207:30020/event

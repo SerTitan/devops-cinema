@@ -1,6 +1,7 @@
 package ru.spb.itmo.asashina.backend.service;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,13 @@ public class MovieService {
     public MovieService(
             MovieRepository movieRepository,
             ReviewRepository reviewRepository,
-            RestClient.Builder builder) {
+            RestClient.Builder builder,
+            @Value("${bot.url}") String botUrl) {
 
         this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
         this.botRestClient = builder
-                .baseUrl("http://158.160.157.207:30020/event")
+                .baseUrl(botUrl)
                 .build();
     }
 
