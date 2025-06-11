@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestClient;
 import ru.spb.itmo.asashina.backend.exception.EntityAlreadyExistsException;
 import ru.spb.itmo.asashina.backend.exception.EntityNotFoundException;
 import ru.spb.itmo.asashina.backend.model.entity.Movie;
@@ -19,6 +20,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +34,12 @@ class MovieServiceTest {
 
     @Mock
     private ReviewRepository reviewRepository;
+
+    @Mock(answer = RETURNS_DEEP_STUBS)
+    private RestClient botRestClient;
+
+    @Mock(answer = RETURNS_DEEP_STUBS)
+    private RestClient.Builder builder;
 
     @InjectMocks
     private MovieService movieService;
